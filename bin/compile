@@ -23,6 +23,12 @@ semver_range=$(cat $build_dir/package.json | $bp_dir/vendor/jq -r .engines.node)
 # Resolve node version using semver.io
 node_version=$(curl --silent --get --data-urlencode "range=${semver_range}" https://semver.io/node/resolve)
 
+# install compass
+status "Installing Compass"
+export GEM_HOME=$build_dir/.gem/ruby/1.9.1
+PATH="$GEM_HOME/bin:$PATH"
+HOME=$build_dir gem install compass --user-install --no-rdoc --no-ri
+
 # Recommend using semver ranges in a safe manner
 if [ "$semver_range" == "null" ]; then
   protip "Specify a node version in package.json"
